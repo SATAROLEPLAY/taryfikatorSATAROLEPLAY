@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Taryfikator SataRP </title>
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      border-bottom: 1px solid #444;
+      padding-bottom: 5px;
+    }
+    label {
+      display: block;
+      margin: 5px 0;
+    }
+    input[type="text"] {
+      background-color: #1e1e1e;
+      color: white;
+      border: 1px solid #555;
+      padding: 5px;
+      margin-bottom: 10px;
+      width: 300px;
+    }
+    button {
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #555;
+    }
+    .section {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Taryfikator SataRP</h1>
+<input type="text" id="filterInput" placeholder="Wyszukaj...">
+<button onclick="resetSelection()">Resetuj wybór</button>
+<button onclick="copyToClipboard()">Kopiuj wyrok</button>
+<button onclick="calculatePenalty()">Pokaż wyrok</button>
+
+<div id="result" style="margin-top: 20px; font-weight: bold;"></div>
+
+<script>
+function resetSelection() {
+  document.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('result').innerHTML = '';
+}
+
+function copyToClipboard() {
+  const text = document.getElementById('result').innerText;
+  navigator.clipboard.writeText(text).then(() => alert('Wyrok skopiowany do schowka!'));
+}
+
+document.getElementById('filterInput').addEventListener('input', function() {
+  const val = this.value.toLowerCase();
+  document.querySelectorAll('.section label').forEach(label => {
+    const visible = label.textContent.toLowerCase().includes(val);
+    label.style.display = visible ? 'block' : 'none';
+  });
+});
+
+function calculatePenalty() {
+  const checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+  let totalFine = 0;
+  let totalJail = 0;
+  let totalPoints = 0;
+  let list = [];
+
+  checkboxes.forEach(cb => {
+    const fine = parseInt(cb.getAttribute('data-fine')) || 0;
+    const jail = parseInt(cb.getAttribute('data-jail')) || 0;
+    const points = parseInt(cb.getAttribute('data-points')) || 0;
+    totalFine += fine;
+    totalJail += jail;
+    totalPoints += points;
+    list.push(cb.value);
+  });
+
+  const summary = `Wyrok:\n\n${list.join('\n')}\n\nŁączna grzywna: ${totalFine} zł\nŁączne więzienie: ${totalJail} miesięcy\nŁączna liczba punktów karnych: ${totalPoints}`;
+  document.getElementById('result').innerText = summary;
+}
+</script>
+<div class="section">
+  <h2>1. Wykroczenia drogowe</h2>
+<label><input type="checkbox" value="Przekroczenie prędkości (5–10 km/h) – 50 zł, 1 pkt, 0 mies." data-fine="50" data-jail="0" data-points="1"> Przekroczenie prędkości (5–10 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (11–15 km/h) – 100 zł, 2 pkt, 0 mies." data-fine="100" data-jail="0" data-points="2"> Przekroczenie prędkości (11–15 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (16–20 km/h) – 200 zł, 3 pkt, 0 mies." data-fine="200" data-jail="0" data-points="3"> Przekroczenie prędkości (16–20 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (21–30 km/h) – 300-400 zł, 5-7 pkt, 0 mies." data-fine="300-400" data-jail="0" data-points="5-7"> Przekroczenie prędkości (21–30 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (31–40 km/h) – 800 zł (1600 zł w recydywie), 9 pkt, 0 mies." data-fine="800" data-jail="0" data-points="9"> Przekroczenie prędkości (31–40 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (41–50 km/h) – 1000 zł (2000 zł w recydywie), 11 pkt, 1 mies." data-fine="1000" data-jail="1" data-points="11"> Przekroczenie prędkości (41–50 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (51–60 km/h) – 1500 zł, (3000 zł w recydywie), 13 pkt, 1 mies." data-fine="1500" data-jail="1" data-points="13"> Przekroczenie prędkości (51–60 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (61–70 km/h) – 2000 zł (4000 zł w recydywie), 14 pkt, 2 mies." data-fine="2000" data-jail="2" data-points="14"> Przekroczenie prędkości (61–70 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (71–80 km/h) – 2500 zł (5000 zł w recydywie), 15 pkt, 2 mies." data-fine="2500" data-jail="2" data-points="15"> Przekroczenie prędkości (71–80 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (81–90 km/h) – 2500 zł (5000 zł w recydywie), 15 pkt, 3 mies." data-fine="2500" data-jail="3" data-points="15"> Przekroczenie prędkości (81–90 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (91–100 km/h) – 2500 zł (5000 zł w recydywie), 15 pkt, 3 mies." data-fine="2500" data-jail="3" data-points="15"> Przekroczenie prędkości (91–100 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (101–110 km/h) – 2500 zł (5000 zł w recydywie), 15 pkt, 4 mies." data-fine="2500" data-jail="4" data-points="15"> Przekroczenie prędkości (101–110 km/h)</label>
+<label><input type="checkbox" value="Przekroczenie prędkości (111–120 km/h) – 2500 zł (5000 zł w recydywie), 15 pkt, 5 mies." data-fine="2500" data-jail="5" data-points="15"> Przekroczenie prędkości (111–120 km/h)</label>
+<label><input type="checkbox" value="Przejazd na czerwonym świetle – 500 zł, 0 miesięcy, 6 pkt" data-fine="500" data-jail="0" data-points="6"> Przejazd na czerwonym świetle</label>
+<label><input type="checkbox" value="Niezatrzymanie się przed znakiem STOP – 300 zł, 0 miesięcy, 6 pkt" data-fine="300" data-jail="0" data-points="6"> Niezatrzymanie się przed znakiem STOP</label>
+<label><input type="checkbox" value="Nieprawidłowe parkowanie – 250 zł, 0 miesięcy, 1-5 pkt" data-fine="250" data-jail="0" data-points="1-5"> Nieprawidłowe parkowanie</label>
+<label><input type="checkbox" value="Brak pasów bezpieczeństwa – 150 zł, 0 miesięcy, 2 pkt" data-fine="150" data-jail="0" data-points="2"> Brak pasów bezpieczeństwa</label>
+<label><input type="checkbox" value="Rozmowa przez telefon podczas jazdy – 200 zł, 0 miesięcy, 5 pkt" data-fine="200" data-jail="0" data-points="5"> Rozmowa przez telefon podczas jazdy</label>
+<label><input type="checkbox" value="Jazda bez świateł – 100 zł, 0 miesięcy, 3 pkt" data-fine="100" data-jail="0" data-points="3"> Jazda bez świateł</label>
+<label><input type="checkbox" value="Brak ważnego przeglądu technicznego – 300 zł, 0 miesięcy, 0 pkt" data-fine="300" data-jail="0" data-points="0"> Brak ważnego przeglądu technicznego</label>
+<label><input type="checkbox" value="Brak OC – 500 zł, 0 miesięcy, 0 pkt" data-fine="500" data-jail="0" data-points="0"> Brak OC</label>
+<label><input type="checkbox" value="Zatrzymanie na zakazie – 150 zł, 0 miesięcy, 2 pkt" data-fine="150" data-jail="0" data-points="2"> Zatrzymanie na zakazie</label>
+<label><input type="checkbox" value="Wyprzedzanie na przejściu – 400 zł, 0 miesięcy, 6 pkt" data-fine="400" data-jail="0" data-points="6"> Wyprzedzanie na przejściu</label>
+<label><input type="checkbox" value="Nieustąpienie pierwszeństwa – 350 zł, 0 miesięcy, 6 pkt" data-fine="350" data-jail="0" data-points="6"> Nieustąpienie pierwszeństwa</label>
+<label><input type="checkbox" value="Brak kasku na motocyklu – 250 zł, 0 miesięcy, 5 pkt" data-fine="250" data-jail="0" data-points="5"> Brak kasku na motocyklu</label>
+<label><input type="checkbox" value="Nieprawidłowe cofanie – 300 zł, 0 miesięcy, 2 pkt" data-fine="300" data-jail="0" data-points="2"> Nieprawidłowe cofanie</label>
+<label><input type="checkbox" value="Nadmierny hałas pojazdu – 150 zł, 0 miesięcy, 0 pkt" data-fine="150" data-jail="0" data-points="0"> Nadmierny hałas pojazdu</label>
+<label><input type="checkbox" value="Jazda pod prąd – 400 zł, 0 miesięcy, 6 pkt" data-fine="400" data-jail="0" data-points="6"> Jazda pod prąd</label>
+<label><input type="checkbox" value="Przewożenie dziecka bez fotelika – 300 zł, 0 miesięcy, 6 pkt" data-fine="300" data-jail="0" data-points="6"> Przewożenie dziecka bez fotelika</label>
+<label><input type="checkbox" value="Zawracanie na autostradzie – 1000 zł, 1 miesiąc, 6 pkt" data-fine="1000" data-jail="1" data-points="6"> Zawracanie na autostradzie</label>
+<label><input type="checkbox" value="Niezatrzymanie się do kontroli – 1500 zł, 2 miesiące, 10 pkt" data-fine="1500" data-jail="2" data-points="10"> Niezatrzymanie się do kontroli</label>
+<label><input type="checkbox" value="Jazda bez prawa jazdy – 1000 zł, 1 miesiąc, 0 pkt" data-fine="1000" data-jail="1" data-points="0"> Jazda bez prawa jazdy</label>
+<label><input type="checkbox" value="Brak dokumentów pojazdu – 200 zł, 0 miesięcy, 0 pkt" data-fine="200" data-jail="0" data-points="0"> Brak dokumentów pojazdu</label>
+<label><input type="checkbox" value="Nieczytelna tablica rejestracyjna – 100 zł, 0 miesięcy, 0 pkt" data-fine="100" data-jail="0" data-points="0"> Nieczytelna tablica rejestracyjna</label>
+<label><input type="checkbox" value="Nieodśnieżony pojazd zimą – 150 zł, 0 miesięcy, 0 pkt" data-fine="150" data-jail="0" data-points="0"> Nieodśnieżony pojazd zimą</label>
+<label><input type="checkbox" value="Wjazd na torowisko przy zaporach – 600 zł, 1 miesiąc, 6 pkt" data-fine="600" data-jail="1" data-points="6"> Wjazd na torowisko przy zaporach</label>
+<label><input type="checkbox" value="Zanieczyszczanie drogi – 200 zł, 0 miesięcy, 0 pkt" data-fine="200" data-jail="0" data-points="0"> Zanieczyszczanie drogi</label>
+<label><input type="checkbox" value="Nieprawidłowe oświetlenie pojazdu – 200 zł, 0 miesięcy, 3 pkt" data-fine="200" data-jail="0" data-points="3"> Nieprawidłowe oświetlenie pojazdu</label>
+<label><input type="checkbox" value="Jazda bez butów ochronnych (motocykl) – 150 zł, 0 miesięcy, 0 pkt" data-fine="150" data-jail="0" data-points="0"> Jazda bez butów ochronnych (motocykl)</label>
+<label><input type="checkbox" value="Wyprzedzanie na podwójnej ciągłej – 800 zł, 1 miesiąc, 6 pkt" data-fine="800" data-jail="1" data-points="6"> Wyprzedzanie na podwójnej ciągłej</label>
+<label><input type="checkbox" value="Nieuzasadnione użycie klaksonu – 100 zł, 0 miesięcy, 0 pkt" data-fine="100" data-jail="0" data-points="0"> Nieuzasadnione użycie klaksonu</label>
+<label><input type="checkbox" value="Brak tablic rejestracyjnych – 500 zł, 2 miesięcy, 0 pkt" data-fine="500" data-jail="2" data-points="0"> Brak tablic rejestracyjnych</label>
+<div class="section">
+  <h2>2. Przestępstwa lekkie</h2>
+  <label><input type="checkbox" value="Kradzież sklepową do 500 zł – 600 zł, 1 miesiąc" data-fine="600" data-jail="1"> Kradzież sklepową do 500 zł</label>
+  <label><input type="checkbox" value="Zakłócanie porządku publicznego – 400 zł, 1 miesiąc" data-fine="400" data-jail="1"> Zakłócanie porządku publicznego</label>
+  <label><input type="checkbox" value="Wandalizm (np. graffiti) – 800 zł, 2 miesiące" data-fine="800" data-jail="2"> Wandalizm (np. graffiti)</label>
+  <label><input type="checkbox" value="Spożywanie alkoholu w miejscu publicznym – 200 zł, 0 miesięcy" data-fine="200" data-jail="0"> Spożywanie alkoholu w miejscu publicznym</label>
+  <label><input type="checkbox" value="Przeklinanie w miejscu publicznym – 100 zł, 0 miesięcy" data-fine="100" data-jail="0"> Przeklinanie w miejscu publicznym</label>
+  <label><input type="checkbox" value="Ucieczka z miejsca kolizji – 1000 zł, 2 miesiące" data-fine="1000" data-jail="2"> Ucieczka z miejsca kolizji</label>
+  <label><input type="checkbox" value="Wprowadzanie w błąd funkcjonariusza – 800 zł, 2 miesiące" data-fine="800" data-jail="2"> Wprowadzanie w błąd funkcjonariusza</label>
+  <label><input type="checkbox" value="Jazda rowerem po alkoholu – 400 zł, 1 miesiąc" data-fine="400" data-jail="1"> Jazda rowerem po alkoholu</label>
+  <label><input type="checkbox" value="Nielegalne rozpalanie ogniska – 300 zł, 0 miesięcy" data-fine="300" data-jail="0"> Nielegalne rozpalanie ogniska</label>
+  <label><input type="checkbox" value="Utrudnianie interwencji policji – 700 zł, 2 miesiące" data-fine="700" data-jail="2"> Utrudnianie interwencji policji</label>
+  <label><input type="checkbox" value="Nielegalna sprzedaż na ulicy – 500 zł, 1 miesiąc" data-fine="500" data-jail="1"> Nielegalna sprzedaż na ulicy</label>
+  <label><input type="checkbox" value="Zgłoszenie fałszywego alarmu – 1200 zł, 3 miesiące" data-fine="1200" data-jail="3"> Zgłoszenie fałszywego alarmu</label>
+  <label><input type="checkbox" value="Obnażanie się publicznie – 600 zł, 1 miesiąc" data-fine="600" data-jail="1"> Obnażanie się publicznie</label>
+  <label><input type="checkbox" value="Nielegalne posiadanie petard – 400 zł, 0 miesięcy" data-fine="400" data-jail="0"> Nielegalne posiadanie petard</label>
+  <label><input type="checkbox" value="Zniszczenie znaku drogowego – 900 zł, 2 miesiące" data-fine="900" data-jail="2"> Zniszczenie znaku drogowego</label>
+  <label><input type="checkbox" value="Nielegalne grafitti – 700 zł, 2 miesiące" data-fine="700" data-jail="2"> Nielegalne grafitti</label>
+  <label><input type="checkbox" value="Bójka bez ciężkiego uszczerbku – 1000 zł, 3 miesiące" data-fine="1000" data-jail="3"> Bójka bez ciężkiego uszczerbku</label>
+  <label><input type="checkbox" value="Zakłócanie ciszy nocnej – 250 zł, 0 miesięcy" data-fine="250" data-jail="0"> Zakłócanie ciszy nocnej</label>
+  <label><input type="checkbox" value="Prowadzenie pojazdu pod wpływem leków – 800 zł, 2 miesiące" data-fine="800" data-jail="2"> Prowadzenie pojazdu pod wpływem leków</label>
+  <label><input type="checkbox" value="Podrabianie biletów – 700 zł, 2 miesiące" data-fine="700" data-jail="2"> Podrabianie biletów</label>
+  <label><input type="checkbox" value="Nielegalna reklama – 300 zł, 0 miesięcy" data-fine="300" data-jail="0"> Nielegalna reklama</label>
+  <label><input type="checkbox" value="Śmiecenie w miejscu publicznym – 150 zł, 0 miesięcy" data-fine="150" data-jail="0"> Śmiecenie w miejscu publicznym</label>
+  <label><input type="checkbox" value="Nielegalne zbieranie datków – 600 zł, 1 miesiąc" data-fine="600" data-jail="1"> Nielegalne zbieranie datków</label>
+  <label><input type="checkbox" value="Utrudnianie ruchu drogowego – 400 zł, 1 miesiąc" data-fine="400" data-jail="1"> Utrudnianie ruchu drogowego</label>
+  <label><input type="checkbox" value="Zgromadzenie bez zezwolenia – 500 zł, 1 miesiąc" data-fine="500" data-jail="1"> Zgromadzenie bez zezwolenia</label>
+  <label><input type="checkbox" value="Ucieczka z autobusu/tramwaju – 200 zł, 0 miesięcy" data-fine="200" data-jail="0"> Ucieczka z autobusu/tramwaju</label>
+  <label><input type="checkbox" value="Kradzież roweru – 1200 zł, 3 miesiące" data-fine="1200" data-jail="3"> Kradzież roweru</label>
+  <label><input type="checkbox" value="Drobne oszustwo (np. reszta) – 1000 zł, 2 miesiące" data-fine="1000" data-jail="2"> Drobne oszustwo (np. reszta)</label>
+  <label><input type="checkbox" value="Sprzedaż alkoholu nieletniemu – 1000 zł, 2 miesiące" data-fine="1000" data-jail="2"> Sprzedaż alkoholu nieletniemu</label>
+  <label><input type="checkbox" value="Kradzież elementów miejskich – 900 zł, 2 miesiące" data-fine="900" data-jail="2"> Kradzież elementów miejskich</label>
+</div>
+<div class="section">
+  <h2>3. Przestępstwa średnie</h2>
+  <label><input type="checkbox" value="Kradzież mienia powyżej 1000 zł – 1500 zł, 4 miesiące" data-fine="1500" data-jail="4"> Kradzież mienia powyżej 1000 zł</label>
+  <label><input type="checkbox" value="Włamanie do pojazdu – 1800 zł, 5 miesięcy" data-fine="1800" data-jail="5"> Włamanie do pojazdu</label>
+  <label><input type="checkbox" value="Pobicie ze skutkiem obrażeń – 2000 zł, 6 miesięcy" data-fine="2000" data-jail="6"> Pobicie ze skutkiem obrażeń</label>
+  <label><input type="checkbox" value="Posiadanie narkotyków (mała ilość) – 1200 zł, 3 miesiące" data-fine="1200" data-jail="3"> Posiadanie narkotyków (mała ilość)</label>
+  <label><input type="checkbox" value="Zniszczenie mienia publicznego – 1500 zł, 4 miesiące" data-fine="1500" data-jail="4"> Zniszczenie mienia publicznego</label>
+  <label><input type="checkbox" value="Jazda pod wpływem alkoholu – 1800 zł, 5 miesięcy" data-fine="1800" data-jail="5"> Jazda pod wpływem alkoholu</label>
+  <label><input type="checkbox" value="Znieważenie funkcjonariusza publicznego – 1000 zł, 2 miesiące" data-fine="1000" data-jail="2"> Znieważenie funkcjonariusza publicznego</label>
+  <label><input type="checkbox" value="Oszustwo internetowe – 2000 zł, 5 miesięcy" data-fine="2000" data-jail="5"> Oszustwo internetowe</label>
+  <label><input type="checkbox" value="Stalking – 1500 zł, 4 miesiące" data-fine="1500" data-jail="4"> Stalking</label>
+  <label><input type="checkbox" value="Zatrzymanie zakładnika bez broni – 2500 zł, 6 miesięcy" data-fine="2500" data-jail="6"> Zatrzymanie zakładnika bez broni</label>
+  <label><input type="checkbox" value="Zatrucie środowiska – 2000 zł, 5 miesięcy" data-fine="2000" data-jail="5"> Zatrucie środowiska</label>
+  <label><input type="checkbox" value="Włamanie do mieszkania – 2200 zł, 6 miesięcy" data-fine="2200" data-jail="6"> Włamanie do mieszkania</label>
+  <label><input type="checkbox" value="Szantaż – 1800 zł, 5 miesięcy" data-fine="1800" data-jail="5"> Szantaż</label>
+  <label><input type="checkbox" value="Niszczenie nagrobków – 2000 zł, 5 miesięcy" data-fine="2000" data-jail="5"> Niszczenie nagrobków</label>
+  <label><input type="checkbox" value="Posługiwanie się cudzym dowodem – 1200 zł, 3 miesiące" data-fine="1200" data-jail="3"> Posługiwanie się cudzym dowodem</label>
+  <label><input type="checkbox" value="Prowadzenie nielegalnej działalności gospodarczej – 1600 zł, 4 miesiące" data-fine="1600" data-jail="4"> Prowadzenie nielegalnej działalności gospodarczej</label>
+  <label><input type="checkbox" value="Przywłaszczenie rzeczy znalezionej – 1000 zł, 2 miesiące" data-fine="1000" data-jail="2"> Przywłaszczenie rzeczy znalezionej</label>
+  <label><input type="checkbox" value="Nielegalna inwigilacja – 1800 zł, 5 miesięcy" data-fine="1800" data-jail="5"> Nielegalna inwigilacja</label>
+  <label><input type="checkbox" value="Podrabianie podpisu – 1500 zł, 3 miesiące" data-fine="1500" data-jail="3"> Podrabianie podpisu</label>
+  <label><input type="checkbox" value="Zmuszanie do określonego zachowania – 1600 zł, 4 miesiące" data-fine="1600" data-jail="4"> Zmuszanie do określonego zachowania</label>
+  <label><input type="checkbox" value="Zakłócenie pracy instytucji publicznej – 1200 zł, 3 miesiące" data-fine="1200" data-jail="3"> Zakłócenie pracy instytucji publicznej</label>
+  <label><input type="checkbox" value="Fałszywe zeznania – 1500 zł, 4 miesiące" data-fine="1500" data-jail="4"> Fałszywe zeznania</label>
+  <label><input type="checkbox" value="Zakup rzeczy kradzionych – 1300 zł, 3 miesiące" data-fine="1300" data-jail="3"> Zakup rzeczy kradzionych</label>
+  <label><input type="checkbox" value="Uprawa marihuany (mała ilość) – 1400 zł, 4 miesiące" data-fine="1400" data-jail="4"> Uprawa marihuany (mała ilość)</label>
+  <label><input type="checkbox" value="Próba włamania – 1700 zł, 4 miesiące" data-fine="1700" data-jail="4"> Próba włamania</label>
+  <label><input type="checkbox" value="Zatrzymanie funkcjonariusza – 1500 zł, 4 miesiące" data-fine="1500" data-jail="4"> Zatrzymanie funkcjonariusza</label>
+  <label><input type="checkbox" value="Kradzież tożsamości – 1800 zł, 5 miesięcy" data-fine="1800" data-jail="5"> Kradzież tożsamości</label>
+  <label><input type="checkbox" value="Użycie podrobionych dokumentów – 2000 zł, 5 miesięcy" data-fine="2000" data-jail="5"> Użycie podrobionych dokumentów</label>
+  <label><input type="checkbox" value="Unikanie alimentów – 1000 zł, 2 miesiące" data-fine="1000" data-jail="2"> Unikanie alimentów</label>
+  <label><input type="checkbox" value="Kradzież paliwa – 1400 zł, 3 miesiące" data-fine="1400" data-jail="3"> Kradzież paliwa</label>
+</div>
+<div class="section">
+  <h2>4. Przestępstwa ciężkie / z uszczerbkiem na zdrowiu</h2>
+  <label><input type="checkbox" value="Usiłowanie zabójstwa – 5000 zł, 20 miesięcy" data-fine="5000" data-jail="20"> Usiłowanie zabójstwa</label>
+  <label><input type="checkbox" value="Zabójstwo – 10000 zł, 40 miesięcy" data-fine="10000" data-jail="40"> Zabójstwo</label>
+  <label><input type="checkbox" value="Ciężkie pobicie ze skutkiem trwałego kalectwa – 4000 zł, 18 miesięcy" data-fine="4000" data-jail="18"> Ciężkie pobicie ze skutkiem trwałego kalectwa</label>
+  <label><input type="checkbox" value="Handel narkotykami – 5000 zł, 16 miesięcy" data-fine="5000" data-jail="16"> Handel narkotykami</label>
+  <label><input type="checkbox" value="Porwanie – 7000 zł, 24 miesiące" data-fine="7000" data-jail="24"> Porwanie</label>
+  <label><input type="checkbox" value="Tortury – 9000 zł, 30 miesięcy" data-fine="9000" data-jail="30"> Tortury</label>
+  <label><input type="checkbox" value="Gwałt – 10000 zł, 36 miesięcy" data-fine="10000" data-jail="36"> Gwałt</label>
+  <label><input type="checkbox" value="Terroryzm – 15000 zł, 48 miesięcy" data-fine="15000" data-jail="48"> Terroryzm</label>
+  <label><input type="checkbox" value="Zamach na funkcjonariusza – 8000 zł, 28 miesięcy" data-fine="8000" data-jail="28"> Zamach na funkcjonariusza</label>
+  <label><input type="checkbox" value="Przemyt broni – 6000 zł, 20 miesięcy" data-fine="6000" data-jail="20"> Przemyt broni</label>
+  <label><input type="checkbox" value="Handel ludźmi – 9000 zł, 32 miesiące" data-fine="9000" data-jail="32"> Handel ludźmi</label>
+  <label><input type="checkbox" value="Użycie broni palnej wobec cywila – 5000 zł, 18 miesięcy" data-fine="5000" data-jail="18"> Użycie broni palnej wobec cywila</label>
+  <label><input type="checkbox" value="Atak z bronią na policję – 9000 zł, 30 miesięcy" data-fine="9000" data-jail="30"> Atak z bronią na policję</label>
+  <label><input type="checkbox" value="Uprowadzenie samolotu – 15000 zł, 45 miesięcy" data-fine="15000" data-jail="45"> Uprowadzenie samolotu</label>
+  <label><input type="checkbox" value="Zorganizowana działalność przestępcza – 7000 zł, 24 miesiące" data-fine="7000" data-jail="24"> Zorganizowana działalność przestępcza</label>
+  <label><input type="checkbox" value="Próba gwałtu – 5000 zł, 15 miesięcy" data-fine="5000" data-jail="15"> Próba gwałtu</label>
+  <label><input type="checkbox" value="Sabotaż infrastruktury – 6000 zł, 20 miesięcy" data-fine="6000" data-jail="20"> Sabotaż infrastruktury</label>
+  <label><input type="checkbox" value="Napad na bank z bronią – 10000 zł, 36 miesięcy" data-fine="10000" data-jail="36"> Napad na bank z bronią</label>
+  <label><input type="checkbox" value="Uprowadzenie osoby małoletniej – 8000 zł, 28 miesięcy" data-fine="8000" data-jail="28"> Uprowadzenie osoby małoletniej</label>
+  <label><input type="checkbox" value="Wymuszenie rozbójnicze – 6000 zł, 20 miesięcy" data-fine="6000" data-jail="20"> Wymuszenie rozbójnicze</label>
+  <label><input type="checkbox" value="Przestępstwo z nienawiści – 5000 zł, 18 miesięcy" data-fine="5000" data-jail="18"> Przestępstwo z nienawiści</label>
+  <label><input type="checkbox" value="Celowe spowodowanie wypadku śmiertelnego – 9000 zł, 30 miesięcy" data-fine="9000" data-jail="30"> Celowe spowodowanie wypadku śmiertelnego</label>
+  <label><input type="checkbox" value="Spalenie mienia publicznego – 4000 zł, 14 miesięcy" data-fine="4000" data-jail="14"> Spalenie mienia publicznego</label>
+  <label><input type="checkbox" value="Napad z nożem – 5000 zł, 16 miesięcy" data-fine="5000" data-jail="16"> Napad z nożem</label>
+  <label><input type="checkbox" value="Zakładanie pułapek zagrażających życiu – 7000 zł, 22 miesiące" data-fine="7000" data-jail="22"> Zakładanie pułapek zagrażających życiu</label>
+  <label><input type="checkbox" value="Wielokrotne pobicie tej samej osoby – 4000 zł, 14 miesięcy" data-fine="4000" data-jail="14"> Wielokrotne pobicie tej samej osoby</label>
+  <label><input type="checkbox" value="Porwanie dla okupu – 10000 zł, 36 miesięcy" data-fine="10000" data-jail="36"> Porwanie dla okupu</label>
+  <label><input type="checkbox" value="Nielegalne operacje medyczne – 6000 zł, 18 miesięcy" data-fine="6000" data-jail="18"> Nielegalne operacje medyczne</label>
+  <label><input type="checkbox" value="Atak chemiczny – 15000 zł, 48 miesięcy" data-fine="15000" data-jail="48"> Atak chemiczny</label>
+  <label><input type="checkbox" value="Zabójstwo funkcjonariusza – 12000 zł, 50 miesięcy" data-fine="12000" data-jail="50"> Zabójstwo funkcjonariusza</label>
+<label>
+  <input type="checkbox" value="Napad z bronią palną – 5000 zł, 15 miesięcy" data-fine="5000" data-jail="15">
+  Napad z bronią palną
+</label>
+<label>
+  <input type="checkbox" value="Napad z bronią białą – 3000 zł, 10 miesięcy" data-fine="3000" data-jail="10">
+  Napad z bronią białą
+</label>
+<label>bbbbbbbbb
+  <input type="checkbox" value="Napad na kasetkę – 4000 zł, 12 miesięcy" data-fine="4000" data-jail="12">
+  Napad na kasetkę
+</label>
+<label>
+  <input type="checkbox" value="Napad na jubilera – 7000 zł, 20 miesięcy" data-fine="7000" data-jail="20">
+  Napad na jubilera
+</label>
+<label>
+  <input type="checkbox" value="Napad na bankomat – 6000 zł, 18 miesięcy" data-fine="6000" data-jail="18">
+  Napad na bankomat
+</label>
+</div>
